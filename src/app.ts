@@ -1,11 +1,14 @@
 import Fastify, { FastifyServerOptions } from 'fastify';
 import auth from './routes/auth.routes';
 import { configureSwagger } from './config/swagger.config';
+import fastifyCors from '@fastify/cors';
 
 const createApp = (opts: FastifyServerOptions = {}) => {
 	const app = Fastify(opts);
 
 	configureSwagger(app);
+
+	app.register(fastifyCors);
 	
 	// Routes
 	app.get('/', () => ({ status: 'Running' }));
