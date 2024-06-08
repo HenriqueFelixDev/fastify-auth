@@ -1,11 +1,17 @@
-import Fastify from 'fastify';
+import Fastify, { FastifyServerOptions } from 'fastify';
+import auth from './routes/auth.routes';
+import { configureSwagger } from './config/swagger.config';
 
-const app = Fastify({
-	logger: true,
-});
+const createApp = (opts: FastifyServerOptions = {}) => {
+	const app = Fastify(opts);
 
-app.get('/', () => {
-	return {result: 'Hello World'};
-});
+	configureSwagger(app);
+	
+	// Routes
+	app.get('/', () => ({ status: 'Running' }));
+	app.register(auth, { prefix: '/v1/auth' });
 
-export default app;
+	return app;
+};
+
+export default createApp;
